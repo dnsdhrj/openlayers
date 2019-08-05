@@ -367,6 +367,63 @@ class RegularShape extends ImageStyle {
   }
 
   /**
+   * Set the angle used in generating the shape.
+   * @param {number} angle Shape's rotation in radians. A value of 0 will have one of the shape's point facing up.
+   * @api
+   */
+  setAngle(angle) {
+    this.angle_ = angle;
+  }
+
+  /**
+   * Set the fill style for generating the shape.
+   * @param {import("./Fill.js").default} fill Fill style.
+   * @api
+   */
+  setFill(fill) {
+    this.fill_ = fill;
+  }
+
+  /**
+   * Set the number of points for generating the shape.
+   * @param {number} points Number of points for stars and regular polygons.
+   * @api
+   */
+  setPoints(points) {
+    this.points_ = points;
+  }
+
+  /**
+   * Set the (primary) radius for generating the shape.
+   * @param {number} radius Radius.
+   * @api
+   */
+  setRadius(radius) {
+    this.radius_ = radius;
+    // TODO: render function is called for backwards compatibility in ol/style/Circle
+    // this shouldn't be called in next major release
+    this.render();
+  }
+
+  /**
+   * Set the secondary radius for generating the shape.
+   * @param {number|undefined} radius2 Radius2.
+   * @api
+   */
+  setRadius2(radius2) {
+    this.radius2_ = radius2;
+  }
+
+  /**
+   * Set the stroke style for generating the shape.
+   * @param {import("./Stroke.js").default} stroke Stroke style.
+   * @api
+   */
+  setStroke(stroke) {
+    this.stroke_ = stroke;
+  }
+
+  /**
    * @private
    * @param {RenderOptions} renderOptions Render options.
    * @param {CanvasRenderingContext2D} context The rendering context.
