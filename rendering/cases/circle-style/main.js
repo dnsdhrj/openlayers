@@ -43,6 +43,7 @@ new Map({
       source: vectorSource,
       style: function(feature) {
         style.getImage().setRadius(feature.get('radius'));
+        style.getImage().render();
         return style;
       }
     })

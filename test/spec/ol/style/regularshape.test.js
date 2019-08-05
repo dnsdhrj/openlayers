@@ -127,4 +127,55 @@ describe('ol.style.RegularShape', function() {
     });
   });
 
+  describe('#render', function() {
+    it('render function regenerates image', function() {
+      const style = new RegularShape({radius: 10});
+      const newFill = new Fill({
+        color: '#FFFF00'
+      });
+      const newStroke = new Stroke({
+        color: '#FFFF00',
+        width: 5
+      });
+      style.setFill(newFill);
+      style.setStroke(newStroke);
+      style.setAngle(1);
+      style.render();
+      expect(style.getImage()).to.be.an(HTMLCanvasElement);
+      expect(style.getSize()).to.eql([31, 31]);
+      expect(style.getImageSize()).to.eql([31, 31]);
+      expect(style.getOrigin()).to.eql([0, 0]);
+      expect(style.getAnchor()).to.eql([15.5, 15.5]);
+      expect(style.getImage()).to.be(style.getHitDetectionImage());
+      expect(style.getHitDetectionImage()).to.be.an(HTMLCanvasElement);
+      expect(style.getHitDetectionImageSize()).to.eql([31, 31]);
+    });
+
+    it('setters does not call render', function() {
+      const style = new RegularShape({radius: 10});
+      const newFill = new Fill({
+        color: '#FFFF00'
+      });
+      const newStroke = new Stroke({
+        color: '#FFFF00',
+        width: 5
+      });
+      style.setFill(newFill);
+      style.setStroke(newStroke);
+      style.setAngle(1);
+      style.setPoints(4);
+      style.setRadius(10);
+      style.setRadius2(10);
+      // should render same as 'style', for render function is not called
+      expect(style.getImage()).to.be.an(HTMLCanvasElement);
+      expect(style.getSize()).to.eql([21, 21]);
+      expect(style.getImageSize()).to.eql([21, 21]);
+      expect(style.getOrigin()).to.eql([0, 0]);
+      expect(style.getAnchor()).to.eql([10.5, 10.5]);
+      expect(style.getImage()).to.not.be(style.getHitDetectionImage());
+      expect(style.getHitDetectionImage()).to.be.an(HTMLCanvasElement);
+      expect(style.getHitDetectionImageSize()).to.eql([21, 21]);
+    });
+  });
+
 });

@@ -52,16 +52,6 @@ class CircleStyle extends RegularShape {
     return style;
   }
 
-  /**
-   * Set the circle radius.
-   *
-   * @param {number} radius Circle radius.
-   * @api
-   */
-  setRadius(radius) {
-    this.radius_ = radius;
-    this.render();
-  }
 }
 
 
