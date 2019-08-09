@@ -15,15 +15,31 @@ const earthquakeStroke = new Stroke({
   color: 'rgba(255, 204, 0, 0.2)',
   width: 1
 });
-const textFill = new Fill({
-  color: '#fff'
+const clusterStyle = new Style({
+  image: new CircleStyle({
+    radius: null,
+    fill: new Fill({
+      color: [255, 153, 0, null]
+    })
+  }),
+  text: new Text({
+    text: '',
+    fill: new Fill({
+      color: '#fff'
+    }),
+    stroke: new Stroke({
+      color: 'rgba(0, 0, 0, 0.6)',
+      width: 3
+    })
+  })
 });
-const textStroke = new Stroke({
-  color: 'rgba(0, 0, 0, 0.6)',
-  width: 3
-});
-const invisibleFill = new Fill({
-  color: 'rgba(255, 255, 255, 0.01)'
+const invisibleStyle = new Style({
+  image: new CircleStyle({
+    radius: null,
+    fill: new Fill({
+      color: 'rgba(255, 255, 255, 0.01)'
+    })
+  })
 });
 
 function createEarthquakeStyle(feature) {
@@ -77,19 +93,13 @@ function styleFunction(feature, resolution) {
   let style;
   const size = feature.get('features').length;
   if (size > 1) {
-    style = new Style({
-      image: new CircleStyle({
-        radius: feature.get('radius'),
-        fill: new Fill({
-          color: [255, 153, 0, Math.min(0.8, 0.4 + (size / maxFeatureCount))]
-        })
-      }),
-      text: new Text({
-        text: size.toString(),
-        fill: textFill,
-        stroke: textStroke
-      })
-    });
+    style = clusterStyle;
+    style.getText().setText(size.toString());
+
+    const image = style.getImage();
+    image.setRadius(feature.get('radius'));
+    image.getFill().getColor()[3] = Math.min(0.8, 0.4 + (size / maxFeatureCount));
+    image.render();
   } else {
     const originalFeature = feature.get('features')[0];
     style = createEarthquakeStyle(originalFeature);
@@ -98,12 +108,11 @@ function styleFunction(feature, resolution) {
 }
 
 function selectStyleFunction(feature) {
-  const styles = [new Style({
-    image: new CircleStyle({
-      radius: feature.get('radius'),
-      fill: invisibleFill
-    })
-  })];
+  const styles = [invisibleStyle];
+  const invisibleImage = invisibleStyle.getImage();
+  invisibleImage.setRadius(feature.get('radius'));
+  invisibleImage.render();
+
   const originalFeatures = feature.get('features');
   let originalFeature;
   for (let i = originalFeatures.length - 1; i >= 0; --i) {
